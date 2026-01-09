@@ -1,0 +1,57 @@
+type: custom:apexcharts-card
+header:
+  show: true
+  title: Risorse Raspberry Pi (24h)
+  show_states: true
+  colorize_states: true
+graph_span: 24h
+update_interval: 5min
+yaxis:
+  - id: percent
+    min: 0
+    max: 100
+    decimals: 0
+    apex_config:
+      tickAmount: 5
+      title:
+        text: "%"
+  - id: temp
+    opposite: true
+    decimals: 0
+    apex_config:
+      tickAmount: 5
+      title:
+        text: °C
+series:
+  - entity: sensor.system_monitor_processor_temperature
+    name: Temp
+    stroke_width: 2
+    curve: smooth
+    yaxis_id: temp
+    type: line
+    group_by:
+      func: avg
+      duration: 10min
+    show:
+      extremas: true
+  - entity: sensor.system_monitor_processor_use
+    name: CPU
+    stroke_width: 2
+    curve: smooth
+    yaxis_id: percent
+    group_by:
+      func: avg
+      duration: 10min
+  - entity: sensor.system_monitor_memory_usage
+    name: RAM
+    stroke_width: 2
+    curve: smooth
+    yaxis_id: percent
+    group_by:
+      func: avg
+      duration: 10min
+  - entity: sensor.system_monitor_load_1_min
+    name: Load (1 min)
+    stroke_width: 1
+    curve: stepline
+    yaxis_id: percent
