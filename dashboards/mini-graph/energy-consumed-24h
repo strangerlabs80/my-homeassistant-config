@@ -1,0 +1,23 @@
+type: custom:mini-graph-card
+name: Energia Consumata 24h
+icon: mdi:lightning-bolt
+hours_to_show: 24
+points_per_hour: 10
+animate: true
+line_width: 2
+show:
+  extrema: false
+  average: false
+  fill: true
+  labels: true
+entities:
+  - entity: sensor.alfa_potenza_prelevata
+    name: Potenza
+    unit: Kw
+color_thresholds:
+  - value: 0
+    color: "#4caf50"
+  - value: 2
+    color: "#ff9800"
+  - value: 3
+    color: "#f44336"
