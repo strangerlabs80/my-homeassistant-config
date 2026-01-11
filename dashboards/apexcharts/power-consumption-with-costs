@@ -1,0 +1,72 @@
+type: custom:apexcharts-card
+experimental:
+  color_threshold: true
+header:
+  show: true
+  title: Consumo Energia Mensile
+  show_states: true
+  colorize_states: true
+graph_span: 1month
+span:
+  start: month
+  offset: +15min
+update_interval: 1h
+yaxis:
+  - id: kWh
+    min: 0
+    decimals: 0
+    apex_config:
+      tickAmount: 5
+      title:
+        text: kWh
+  - id: euro
+    min: 0
+    max: 200
+    opposite: true
+    decimals: 0
+    apex_config:
+      tickAmount: 5
+      title:
+        text: €
+series:
+  - entity: sensor.alfa_energia_consumata
+    type: column
+    name: Oggi
+    unit: kWh
+    yaxis_id: kWh
+    statistics:
+      type: change
+      period: day
+      align: start
+    show:
+      datalabels: false
+    color_threshold:
+      - value: 0
+        color: "#4caf50"
+      - value: 10
+        color: "#ff9800"
+      - value: 15
+        color: "#f44336"
+  - entity: sensor.alfa_energia_consumata
+    type: line
+    name: Costo Totale
+    unit: €
+    yaxis_id: euro
+    stroke_width: 3
+    color: "#3c7ee7"
+    group_by:
+      duration: 1d
+      func: max
+    transform: return (x- 22068.5) * 0.22 + 17.05;
+    show:
+      legend_value: false
+      in_header: true
+      in_chart: true
+  - entity: sensor.alfa_energia_consumata
+    name: Mese
+    unit: kWh
+    statistics:
+      type: change
+      period: month
+    show:
+      in_chart: false
