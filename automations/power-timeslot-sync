@@ -1,0 +1,12 @@
+alias: Sincronizza Fasce Alfa con Contatore
+description: Cambia la tariffa del Utility Meter in base al sensore reale di Alfa
+triggers:
+  - entity_id: sensor.alfa_fascia_oraria_attuale
+    trigger: state
+actions:
+  - data:
+      option: "{{ trigger.to_state.state }}"
+    action: select.select_option
+    target:
+      entity_id: select.energia_mensile_consumata
+mode: single
