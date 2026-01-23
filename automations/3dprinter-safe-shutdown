@@ -1,0 +1,36 @@
+alias: "3D Printer: Safe Shutdown"
+description: "Turns off the Sonoff plug only after the nozzle has cooled down"
+mode: single
+
+trigger:
+  # Triggered when the state goes from 'Printing' to 'Operational'
+  - platform: state
+    entity_id: sensor.octoprint_current_state
+    from: "Printing"
+    to: "Operational"
+
+action:
+  # 1. Wait until the Nozzle temperature drops below 50°C
+  - wait_for_trigger:
+      - platform: numeric_state
+        entity_id: sensor.octoprint_tool_0_temperature
+        below: 50
+    timeout: "00:45:00"
+
+  # 2. Wait until the Bed temperature drops below 50°C
+  - wait_for_trigger:
+      - platform: numeric_state
+        entity_id: sensor.octoprint_actual_bed_temperature
+        below: 50
+    timeout: "00:45:00"
+
+  # 3. Final shutdown of the Sonoff plug
+  - service: switch.turn_off
+    target:
+      entity_id: switch.sonoff_10022c6daa
+
+  # 4. Mobile notification
+  - service: notify.mobile_app_your_phone
+    data:
+      title: "3D Printer"
+      message: "Print finished, nozzle cooled down, and plug turned off."
